@@ -4,3 +4,4 @@ __pycache__/
 # blog-only files
 post.md
 publish-draft.sh
+mkdraft.php
