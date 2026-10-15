@@ -1,0 +1,63 @@
+{
+  "scenario": "single+link-zlib",
+  "layout": "single",
+  "config": [
+    "target.x86_64-unknown-linux-gnu.rustflags=[\"-C\",\"link-arg=-Wl,--compress-debug-sections=zlib\"]"
+  ],
+  "env": [],
+  "zflags": [],
+  "rustc": "rustc 1.98.0 (88d9e12ae 2026-08-18)",
+  "size_after_session": {
+    "executables": 442855424,
+    "rlib": 1167667200,
+    "rmeta": 455364608,
+    "proc_macro_so": 151814144,
+    "dwo": 0,
+    "incremental": 468123648,
+    "build_scripts": 88453120,
+    "build_script_output": 63983616,
+    "other": 16908288,
+    "dev_total": 2855170048,
+    "release": 0,
+    "total": 2855178240,
+    "executable_count": 8
+  },
+  "tests": {
+    "ok": true,
+    "passed": 74
+  },
+  "debug": {
+    "backtrace_file_line": true,
+    "gdb_line_breakpoint": true,
+    "gdb_locals": true,
+    "backtrace_excerpt": "thread 'main' (478986) panicked at crates/svc-core/src/lib.rs:79:9:\nboom from svc-core\n   2: svc_core::explode\n             at ./demo/crates/svc-core/src/lib.rs:79:9\n   3: svc_core::explode\n             at ./demo/crates/svc-core/src/lib.rs:81:5\n   4: svc_core::explode\n             at ./demo/crates/svc-core/src/lib.rs:81:5",
+    "gdb_excerpt": "Breakpoint 1 at 0x2e195: file crates/svc-core/src/lib.rs, line 81.\nBreakpoint 1, svc_core::explode (depth=2) at crates/svc-core/src/lib.rs:81\n81\t    explode(depth - 1) + 1\ndepth = 2"
+  },
+  "size_final": {
+    "executables": 442855424,
+    "rlib": 1167667200,
+    "rmeta": 455364608,
+    "proc_macro_so": 151814144,
+    "dwo": 0,
+    "incremental": 551006208,
+    "build_scripts": 88453120,
+    "build_script_output": 63983616,
+    "other": 16908288,
+    "dev_total": 2938052608,
+    "release": 0,
+    "total": 2938060800,
+    "executable_count": 8
+  },
+  "times": {
+    "build": 24.620957980048843,
+    "test_no_run": 15.468062963103876,
+    "check_all_targets": 16.935596221941523,
+    "edit_rebuild_tests_median": 1.4698430350981653,
+    "edit_rebuild_tests_all": [
+      1.5213166329776868,
+      1.3984815339790657,
+      1.4698430350981653
+    ],
+    "test_run": 1.6810368560254574
+  }
+}

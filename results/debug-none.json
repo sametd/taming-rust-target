@@ -1,0 +1,63 @@
+{
+  "scenario": "debug-none",
+  "layout": "split",
+  "config": [
+    "profile.dev.debug=false"
+  ],
+  "env": [],
+  "zflags": [],
+  "rustc": "rustc 1.98.0 (88d9e12ae 2026-08-18)",
+  "size_after_session": {
+    "executables": 992526336,
+    "rlib": 577396736,
+    "rmeta": 433049600,
+    "proc_macro_so": 84365312,
+    "dwo": 0,
+    "incremental": 399908864,
+    "build_scripts": 27226112,
+    "build_script_output": 23764992,
+    "other": 17022976,
+    "dev_total": 2555260928,
+    "release": 0,
+    "total": 2555269120,
+    "executable_count": 31
+  },
+  "tests": {
+    "ok": true,
+    "passed": 74
+  },
+  "debug": {
+    "backtrace_file_line": false,
+    "gdb_line_breakpoint": false,
+    "gdb_locals": false,
+    "backtrace_excerpt": "thread 'main' (419179) panicked at crates/svc-core/src/lib.rs:79:9:\nboom from svc-core\n   2: svc_core::explode\n   3: svc_core::explode\n   4: svc_core::explode",
+    "gdb_excerpt": ""
+  },
+  "size_final": {
+    "executables": 992526336,
+    "rlib": 577396736,
+    "rmeta": 433049600,
+    "proc_macro_so": 84365312,
+    "dwo": 0,
+    "incremental": 619339776,
+    "build_scripts": 27226112,
+    "build_script_output": 23764992,
+    "other": 17022976,
+    "dev_total": 2774691840,
+    "release": 0,
+    "total": 2774700032,
+    "executable_count": 31
+  },
+  "times": {
+    "build": 21.9245747809764,
+    "test_no_run": 12.471970789018087,
+    "check_all_targets": 11.494538870058022,
+    "edit_rebuild_tests_median": 2.8985013630008325,
+    "edit_rebuild_tests_all": [
+      2.8985013630008325,
+      2.9711919330293313,
+      2.833051305031404
+    ],
+    "test_run": 3.531362419947982
+  }
+}

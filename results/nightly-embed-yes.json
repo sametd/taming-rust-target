@@ -1,0 +1,63 @@
+{
+  "scenario": "nightly-embed-yes",
+  "layout": "split",
+  "config": [],
+  "env": [],
+  "zflags": [
+    "embed-metadata=yes"
+  ],
+  "rustc": "rustc 1.101.0-nightly (7df81381d 2026-10-14)",
+  "size_after_session": {
+    "executables": 5601062912,
+    "rlib": 1157812224,
+    "rmeta": 466763776,
+    "proc_macro_so": 238235648,
+    "dwo": 0,
+    "incremental": 628318208,
+    "build_scripts": 188444672,
+    "build_script_output": 69566464,
+    "other": 15142912,
+    "dev_total": 8365346816,
+    "release": 0,
+    "total": 8365355008,
+    "executable_count": 31
+  },
+  "tests": {
+    "ok": true,
+    "passed": 74
+  },
+  "debug": {
+    "backtrace_file_line": true,
+    "gdb_line_breakpoint": true,
+    "gdb_locals": true,
+    "backtrace_excerpt": "thread 'main' (550114) panicked at crates/svc-core/src/lib.rs:79:9:\nboom from svc-core\n   2: svc_core::explode\n             at ./demo/crates/svc-core/src/lib.rs:79:9\n   3: svc_core::explode\n             at ./demo/crates/svc-core/src/lib.rs:81:5\n   4: svc_core::explode\n             at ./demo/crates/svc-core/src/lib.rs:81:5",
+    "gdb_excerpt": "Breakpoint 1 at 0x25de5: file crates/svc-core/src/lib.rs, line 81.\nBreakpoint 1, svc_core::explode (depth=2) at crates/svc-core/src/lib.rs:81\n81\t    explode(depth - 1) + 1\ndepth = 2"
+  },
+  "size_final": {
+    "executables": 5603266560,
+    "rlib": 1157812224,
+    "rmeta": 466763776,
+    "proc_macro_so": 238235648,
+    "dwo": 0,
+    "incremental": 624037888,
+    "build_scripts": 188444672,
+    "build_script_output": 69566464,
+    "other": 15142912,
+    "dev_total": 8363270144,
+    "release": 0,
+    "total": 8363278336,
+    "executable_count": 31
+  },
+  "times": {
+    "build": 27.317556601017714,
+    "test_no_run": 20.51945705304388,
+    "check_all_targets": 16.654248267994262,
+    "edit_rebuild_tests_median": 15.195650951936841,
+    "edit_rebuild_tests_all": [
+      7.839004491921514,
+      15.195650951936841,
+      19.961217648000456
+    ],
+    "test_run": 21.154832425061613
+  }
+}

@@ -1,0 +1,66 @@
+{
+  "scenario": "nightly-disk-critical",
+  "layout": "single",
+  "config": [
+    "profile.dev.debug=\"line-tables-only\"",
+    "profile.dev.package.\"*\".debug=false"
+  ],
+  "env": [],
+  "zflags": [
+    "embed-metadata=no"
+  ],
+  "rustc": "rustc 1.101.0-nightly (7df81381d 2026-10-14)",
+  "size_after_session": {
+    "executables": 194043904,
+    "rlib": 303661056,
+    "rmeta": 443961344,
+    "proc_macro_so": 83259392,
+    "dwo": 0,
+    "incremental": 189194240,
+    "build_scripts": 26451968,
+    "build_script_output": 28917760,
+    "other": 13508608,
+    "dev_total": 1282998272,
+    "release": 0,
+    "total": 1283006464,
+    "executable_count": 8
+  },
+  "tests": {
+    "ok": true,
+    "passed": 74
+  },
+  "debug": {
+    "backtrace_file_line": true,
+    "gdb_line_breakpoint": true,
+    "gdb_locals": false,
+    "backtrace_excerpt": "thread 'main' (593537) panicked at crates/svc-core/src/lib.rs:79:9:\nboom from svc-core\n   2: svc_core::explode\n             at ./demo/crates/svc-core/src/lib.rs:79:9\n   3: svc_core::explode\n             at ./demo/crates/svc-core/src/lib.rs:81:5\n   4: svc_core::explode\n             at ./demo/crates/svc-core/src/lib.rs:81:5",
+    "gdb_excerpt": "Breakpoint 1 at 0x25961: file crates/svc-core/src/lib.rs, line 81.\nBreakpoint 1, svc_core::explode () at crates/svc-core/src/lib.rs:81\n81\t    explode(depth - 1) + 1"
+  },
+  "size_final": {
+    "executables": 194043904,
+    "rlib": 303661056,
+    "rmeta": 443961344,
+    "proc_macro_so": 83259392,
+    "dwo": 0,
+    "incremental": 186019840,
+    "build_scripts": 26451968,
+    "build_script_output": 28917760,
+    "other": 13508608,
+    "dev_total": 1279823872,
+    "release": 0,
+    "total": 1279832064,
+    "executable_count": 8
+  },
+  "times": {
+    "build": 21.877221566042863,
+    "test_no_run": 10.711988088092767,
+    "check_all_targets": 12.701263715978712,
+    "edit_rebuild_tests_median": 0.9095106170279905,
+    "edit_rebuild_tests_all": [
+      0.9095106170279905,
+      0.887375452904962,
+      0.9527972600189969
+    ],
+    "test_run": 1.0799361140234396
+  }
+}

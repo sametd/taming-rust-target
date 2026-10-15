@@ -1,0 +1,63 @@
+{
+  "scenario": "nightly-embed-no",
+  "layout": "split",
+  "config": [],
+  "env": [],
+  "zflags": [
+    "embed-metadata=no"
+  ],
+  "rustc": "rustc 1.101.0-nightly (7df81381d 2026-10-14)",
+  "size_after_session": {
+    "executables": 5603209216,
+    "rlib": 855519232,
+    "rmeta": 466763776,
+    "proc_macro_so": 238239744,
+    "dwo": 0,
+    "incremental": 628318208,
+    "build_scripts": 188420096,
+    "build_script_output": 69558272,
+    "other": 15142912,
+    "dev_total": 8065171456,
+    "release": 0,
+    "total": 8065179648,
+    "executable_count": 31
+  },
+  "tests": {
+    "ok": true,
+    "passed": 74
+  },
+  "debug": {
+    "backtrace_file_line": true,
+    "gdb_line_breakpoint": true,
+    "gdb_locals": true,
+    "backtrace_excerpt": "thread 'main' (580112) panicked at crates/svc-core/src/lib.rs:79:9:\nboom from svc-core\n   2: svc_core::explode\n             at ./demo/crates/svc-core/src/lib.rs:79:9\n   3: svc_core::explode\n             at ./demo/crates/svc-core/src/lib.rs:81:5\n   4: svc_core::explode\n             at ./demo/crates/svc-core/src/lib.rs:81:5",
+    "gdb_excerpt": "Breakpoint 1 at 0x25de5: file crates/svc-core/src/lib.rs, line 81.\nBreakpoint 1, svc_core::explode (depth=2) at crates/svc-core/src/lib.rs:81\n81\t    explode(depth - 1) + 1\ndepth = 2"
+  },
+  "size_final": {
+    "executables": 5602955264,
+    "rlib": 855519232,
+    "rmeta": 466763776,
+    "proc_macro_so": 238239744,
+    "dwo": 0,
+    "incremental": 624033792,
+    "build_scripts": 188420096,
+    "build_script_output": 69558272,
+    "other": 15142912,
+    "dev_total": 8060633088,
+    "release": 0,
+    "total": 8060641280,
+    "executable_count": 31
+  },
+  "times": {
+    "build": 25.104110505082645,
+    "test_no_run": 33.57394344697241,
+    "check_all_targets": 15.792900812928565,
+    "edit_rebuild_tests_median": 23.5225080170203,
+    "edit_rebuild_tests_all": [
+      28.109126867027953,
+      23.5225080170203,
+      22.37931467499584
+    ],
+    "test_run": 17.71651295304764
+  }
+}

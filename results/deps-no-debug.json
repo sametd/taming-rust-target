@@ -1,0 +1,63 @@
+{
+  "scenario": "deps-no-debug",
+  "layout": "split",
+  "config": [
+    "profile.dev.package.\"*\".debug=false"
+  ],
+  "env": [],
+  "zflags": [],
+  "rustc": "rustc 1.98.0 (88d9e12ae 2026-08-18)",
+  "size_after_session": {
+    "executables": 1832595456,
+    "rlib": 705085440,
+    "rmeta": 433049600,
+    "proc_macro_so": 84365312,
+    "dwo": 0,
+    "incremental": 752357376,
+    "build_scripts": 27226112,
+    "build_script_output": 23764992,
+    "other": 17027072,
+    "dev_total": 3875471360,
+    "release": 0,
+    "total": 3875479552,
+    "executable_count": 31
+  },
+  "tests": {
+    "ok": true,
+    "passed": 74
+  },
+  "debug": {
+    "backtrace_file_line": true,
+    "gdb_line_breakpoint": true,
+    "gdb_locals": true,
+    "backtrace_excerpt": "thread 'main' (375217) panicked at crates/svc-core/src/lib.rs:79:9:\nboom from svc-core\n   2: svc_core::explode\n             at ./demo/crates/svc-core/src/lib.rs:79:9\n   3: svc_core::explode\n             at ./demo/crates/svc-core/src/lib.rs:81:5\n   4: svc_core::explode\n             at ./demo/crates/svc-core/src/lib.rs:81:5",
+    "gdb_excerpt": "Breakpoint 1 at 0x2dcc5: file crates/svc-core/src/lib.rs, line 81.\nBreakpoint 1, svc_core::explode (depth=2) at crates/svc-core/src/lib.rs:81\n81\t    explode(depth - 1) + 1\ndepth = 2"
+  },
+  "size_final": {
+    "executables": 1832890368,
+    "rlib": 705085440,
+    "rmeta": 433049600,
+    "proc_macro_so": 84365312,
+    "dwo": 0,
+    "incremental": 999272448,
+    "build_scripts": 27226112,
+    "build_script_output": 23764992,
+    "other": 17027072,
+    "dev_total": 4122681344,
+    "release": 0,
+    "total": 4122689536,
+    "executable_count": 31
+  },
+  "times": {
+    "build": 22.587868116097525,
+    "test_no_run": 14.556299626943655,
+    "check_all_targets": 11.514808967942372,
+    "edit_rebuild_tests_median": 3.379127649939619,
+    "edit_rebuild_tests_all": [
+      3.411280047032051,
+      3.3270340230083093,
+      3.379127649939619
+    ],
+    "test_run": 4.193708634003997
+  }
+}

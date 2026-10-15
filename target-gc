@@ -1,0 +1,225 @@
+#!/usr/bin/env python3
+"""target-gc: delete stale cargo build artifacts, keep everything you still use.
+
+Mark & sweep:
+  mark   run the cargo commands you normally run, with --message-format=json.
+         Cargo reports every artifact the build uses, including up-to-date
+         ("fresh") ones. Their hashes are the live set.
+  sweep  in each profile directory those commands used, delete deps/,
+         examples/, build/ and .fingerprint/ entries whose hash is not live,
+         and incremental/ dirs beyond what the live units need.
+
+Unlike `cargo clean`, nothing you use is deleted, so the next build is a no-op.
+Unlike age-based cleaning, it also catches stale artifacts that are recent
+(toolchain bumps, feature/flag changes, rust-analyzer builds).
+
+Usage:
+  target-gc [--dry-run] [--manifest-path P ...] [--target-dir D] [-- CMD ...]
+
+Shared target directory (CARGO_TARGET_DIR / build.target-dir used by several
+projects): pass every project that uses it, or their artifacts look dead:
+  target-gc --manifest-path ~/a/Cargo.toml --manifest-path ~/b/Cargo.toml
+
+Each CMD is a cargo subcommand line, e.g.  -- "build --workspace" "test --no-run"
+Default commands:
+  build --workspace --all-targets
+  test  --workspace --no-run
+  check --workspace --all-targets
+Add e.g. "build --release" to keep release artifacts too. Profile directories
+that no command touches (e.g. release/ above) are left alone entirely.
+
+Zero dependencies (Python 3.8+). MIT OR Apache-2.0.
+"""
+import argparse, json, os, re, shlex, shutil, subprocess, sys, time
+from collections import Counter, defaultdict
+from pathlib import Path
+
+HASH_RE = re.compile(r"^(?:lib)?(?P<name>.+?)-(?P<hash>[0-9a-f]{16})(?:\..+)?$")
+DEFAULT_CMDS = ["build --workspace --all-targets", "test --workspace --no-run", "check --workspace --all-targets"]
+
+
+def human(n: float) -> str:
+    for unit in ("B", "KiB", "MiB", "GiB", "TiB"):
+        if abs(n) < 1024 or unit == "TiB":
+            return f"{n:.1f} {unit}" if unit != "B" else f"{int(n)} B"
+        n /= 1024
+
+
+def disk_usage(p: Path, seen=None) -> int:
+    """Allocated bytes, counting hardlinked files once (uplifted artifacts are hardlinks)."""
+    seen = set() if seen is None else seen
+    paths = [p] if (p.is_symlink() or p.is_file()) else (
+        Path(dp) / f for dp, _, fs in os.walk(p) for f in fs)
+    total = 0
+    for q in paths:
+        try:
+            st = q.lstat()
+        except FileNotFoundError:
+            continue
+        if (st.st_dev, st.st_ino) not in seen:
+            seen.add((st.st_dev, st.st_ino))
+            total += st.st_blocks * 512
+    return total
+
+
+def target_dir(args) -> Path:
+    if args.target_dir:
+        return Path(args.target_dir).resolve()
+    dirs = set()
+    for mp in args.manifest_path or [None]:
+        cmd = ["cargo", "metadata", "--format-version", "1", "--no-deps"]
+        if mp:
+            cmd += ["--manifest-path", mp]
+        dirs.add(json.loads(subprocess.check_output(cmd))["target_directory"])
+    if len(dirs) > 1:
+        sys.exit(f"target-gc: these projects use different target dirs: {sorted(dirs)}")
+    return Path(dirs.pop())
+
+
+def mark(args, target: Path):
+    """Run the cargo commands; return {profile_dir: set(live hashes)}, live workspace crate names."""
+    live_paths, ws_units, seen_units = [], Counter(), set()
+    jobs = [(mp, line) for mp in (args.manifest_path or [None]) for line in args.commands]
+    for mp, line in jobs:
+        cmd = ["cargo", *shlex.split(line), "--message-format=json-render-diagnostics"]
+        if mp:
+            cmd += ["--manifest-path", mp]
+        env = dict(os.environ, CARGO_TARGET_DIR=str(target))
+        print(f"  mark: cargo {line}" + (f"  ({mp})" if mp else ""), file=sys.stderr)
+        p = subprocess.run(cmd, env=env, stdout=subprocess.PIPE, text=True)
+        if p.returncode != 0:
+            sys.exit(f"target-gc: `cargo {line}` failed; nothing was deleted.")
+        for msg in p.stdout.splitlines():
+            try:
+                m = json.loads(msg)
+            except json.JSONDecodeError:
+                continue
+            if m.get("reason") == "compiler-artifact":
+                live_paths += m.get("filenames") or []
+                if m.get("executable"):
+                    live_paths.append(m["executable"])
+                key = tuple(sorted(m.get("filenames") or []))
+                if m["package_id"].startswith("path+file://") and key not in seen_units:
+                    seen_units.add(key)  # each unit counted once, even if several commands report it
+                    ws_units[m["target"]["name"].replace("-", "_")] += 1
+            elif m.get("reason") == "build-script-executed":
+                live_paths.append(m["out_dir"])
+
+    live = defaultdict(set)
+    inode_cache = {}
+    for raw in live_paths:
+        p = Path(raw)
+        try:
+            rel = p.relative_to(target)
+        except ValueError:
+            continue
+        parts = rel.parts
+        i = next((k for k, s in enumerate(parts) if s in ("deps", "build", "examples")), None)
+        mm = HASH_RE.match(parts[i + 1]) if i is not None and len(parts) > i + 1 else None
+        if mm:
+            live[target.joinpath(*parts[:i])].add(mm["hash"])
+            continue
+        # Uplifted copy without a hash (debug/svc, debug/libsvc.rlib, debug/examples/foo):
+        # it is a hardlink of a hashed file in deps/ or examples/, so match by inode.
+        profile_dir = target.joinpath(*(parts[:i] if i is not None else parts[:-1]))
+        try:
+            ino = p.stat().st_ino
+        except FileNotFoundError:
+            continue
+        for sub in ("deps", "examples"):
+            d = profile_dir / sub
+            if not d.is_dir():
+                continue
+            if d not in inode_cache:
+                inode_cache[d] = defaultdict(list)
+                for f in os.scandir(d):
+                    if f.is_file(follow_symlinks=False):
+                        inode_cache[d][f.inode()].append(f.name)
+            for name in inode_cache[d].get(ino, []):
+                h = HASH_RE.match(name)
+                if h:
+                    live[profile_dir].add(h["hash"])
+    return live, ws_units
+
+
+def sweep(profile_dir: Path, live: set, ws_units: Counter, dry: bool):
+    doomed, stale_hashes = [], set()
+    for sub in ("deps", "examples"):
+        d = profile_dir / sub
+        if not d.is_dir():
+            continue
+        for f in os.scandir(d):
+            mm = HASH_RE.match(f.name)
+            if mm and mm["hash"] not in live:
+                doomed.append(Path(f.path))
+                stale_hashes.add(mm["hash"])
+    b = profile_dir / "build"
+    if b.is_dir():
+        for f in os.scandir(b):
+            mm = HASH_RE.match(f.name)
+            if mm and mm["hash"] not in live:
+                doomed.append(Path(f.path))
+                stale_hashes.add(mm["hash"])
+    fp = profile_dir / ".fingerprint"
+    if fp.is_dir():
+        for f in os.scandir(fp):
+            mm = HASH_RE.match(f.name)
+            # only drop fingerprints that belong to artifacts we're deleting
+            if mm and mm["hash"] in stale_hashes:
+                doomed.append(Path(f.path))
+    inc = profile_dir / "incremental"
+    if inc.is_dir():
+        by_crate = defaultdict(list)
+        for f in os.scandir(inc):
+            if f.is_dir():
+                by_crate[f.name.rsplit("-", 1)[0]].append((f.stat().st_mtime, Path(f.path)))
+        for crate, dirs in by_crate.items():
+            keep = ws_units.get(crate, 0)
+            for _, p in sorted(dirs, reverse=True)[keep:]:
+                doomed.append(p)
+    freed, seen = 0, set()
+    for p in doomed:
+        freed += disk_usage(p, seen)
+        if not dry:
+            if p.is_dir() and not p.is_symlink():
+                shutil.rmtree(p, ignore_errors=True)
+            else:
+                p.unlink(missing_ok=True)
+    return len(doomed), freed
+
+
+def main():
+    ap = argparse.ArgumentParser(description=__doc__.split("\n\n")[0])
+    ap.add_argument("--dry-run", "-n", action="store_true")
+    ap.add_argument("--manifest-path", action="append", default=[],
+                    help="project to mark; repeat for every project sharing the target dir")
+    ap.add_argument("--target-dir")
+    ap.add_argument("commands", nargs="*", help="cargo commands to keep artifacts for")
+    args = ap.parse_args()
+    args.commands = args.commands or DEFAULT_CMDS
+
+    target = target_dir(args)
+    if not (target / "CACHEDIR.TAG").exists():
+        sys.exit(f"target-gc: {target} doesn't look like a cargo target dir (no CACHEDIR.TAG)")
+    before = disk_usage(target)
+    t = time.time()
+    live, ws_units = mark(args, target)
+    print(f"target-gc: {target}  ({human(before)})", file=sys.stderr)
+    total_n = total_freed = 0
+    for profile_dir, hashes in sorted(live.items()):
+        n, freed = sweep(profile_dir, hashes, ws_units, args.dry_run)
+        total_n += n
+        total_freed += freed
+        print(f"  {profile_dir.relative_to(target)}/: {len(hashes)} live units, "
+              f"{'would remove' if args.dry_run else 'removed'} {n} entries, {human(freed)}", file=sys.stderr)
+    untouched = [p for p in target.iterdir() if p.is_dir() and p not in live and p.name not in ("tmp",)]
+    for p in untouched:
+        if any(p == d or d.is_relative_to(p) for d in live):
+            continue
+        print(f"  {p.name}/: not used by these commands, left alone ({human(disk_usage(p))})", file=sys.stderr)
+    verb = "would free" if args.dry_run else "freed"
+    print(f"target-gc: {verb} {human(total_freed)} of {human(before)} in {time.time() - t:.0f}s", file=sys.stderr)
+
+
+if __name__ == "__main__":
+    main()

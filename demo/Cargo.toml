@@ -1,0 +1,8 @@
+[workspace]
+resolver = "3"
+members = ["crates/svc-core", "crates/svc"]
+
+[workspace.package]
+edition = "2024"
+version = "0.1.0"
+publish = false

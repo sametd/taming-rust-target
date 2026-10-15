@@ -1,0 +1,58 @@
+{
+  "scenario": "ci-baseline",
+  "layout": "split",
+  "config": [],
+  "env": [
+    "CARGO_INCREMENTAL=0"
+  ],
+  "zflags": [],
+  "rustc": "rustc 1.98.0 (88d9e12ae 2026-08-18)",
+  "size_after_session": {
+    "executables": 5458530304,
+    "rlib": 1070706688,
+    "rmeta": 278667264,
+    "proc_macro_so": 200376320,
+    "dwo": 0,
+    "incremental": 0,
+    "build_scripts": 165027840,
+    "build_script_output": 31997952,
+    "other": 10440704,
+    "dev_total": 7215747072,
+    "release": 0,
+    "total": 7215755264,
+    "executable_count": 31
+  },
+  "tests": {
+    "ok": true,
+    "passed": 74
+  },
+  "debug": {
+    "backtrace_file_line": true,
+    "gdb_line_breakpoint": true,
+    "gdb_locals": true,
+    "backtrace_excerpt": "thread 'main' (622955) panicked at crates/svc-core/src/lib.rs:79:9:\nboom from svc-core\n   2: svc_core::explode\n             at ./demo/crates/svc-core/src/lib.rs:79:9\n   3: svc_core::explode\n             at ./demo/crates/svc-core/src/lib.rs:81:5\n   4: svc_core::explode\n             at ./demo/crates/svc-core/src/lib.rs:81:5",
+    "gdb_excerpt": "Breakpoint 1 at 0x2e185: file crates/svc-core/src/lib.rs, line 81.\nBreakpoint 1, svc_core::explode (depth=2) at crates/svc-core/src/lib.rs:81\n81\t    explode(depth - 1) + 1\ndepth = 2"
+  },
+  "size_final": {
+    "executables": 5458468864,
+    "rlib": 1070706688,
+    "rmeta": 278667264,
+    "proc_macro_so": 200376320,
+    "dwo": 0,
+    "incremental": 0,
+    "build_scripts": 165027840,
+    "build_script_output": 31997952,
+    "other": 10440704,
+    "dev_total": 7215685632,
+    "release": 0,
+    "total": 7215693824,
+    "executable_count": 31
+  },
+  "times": {
+    "build": 25.324873725068755,
+    "test_no_run": 15.91366191895213,
+    "edit_rebuild_tests_median": null,
+    "edit_rebuild_tests_all": [],
+    "test_run": 9.290482552954927
+  }
+}

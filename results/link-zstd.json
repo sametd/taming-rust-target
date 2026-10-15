@@ -1,0 +1,63 @@
+{
+  "scenario": "link-zstd",
+  "layout": "split",
+  "config": [
+    "target.x86_64-unknown-linux-gnu.rustflags=[\"-C\",\"link-arg=-Wl,--compress-debug-sections=zstd\"]"
+  ],
+  "env": [],
+  "zflags": [],
+  "rustc": "rustc 1.98.0 (88d9e12ae 2026-08-18)",
+  "size_after_session": {
+    "executables": 2134519808,
+    "rlib": 1167667200,
+    "rmeta": 455364608,
+    "proc_macro_so": 136171520,
+    "dwo": 0,
+    "incremental": 753127424,
+    "build_scripts": 68456448,
+    "build_script_output": 63983616,
+    "other": 17846272,
+    "dev_total": 4797136896,
+    "release": 0,
+    "total": 4797145088,
+    "executable_count": 31
+  },
+  "tests": {
+    "ok": true,
+    "passed": 74
+  },
+  "debug": {
+    "backtrace_file_line": false,
+    "gdb_line_breakpoint": true,
+    "gdb_locals": true,
+    "backtrace_excerpt": "thread 'main' (317579) panicked at crates/svc-core/src/lib.rs:79:9:\nboom from svc-core\n   2: svc_core::explode\n   3: svc_core::explode\n   4: svc_core::explode",
+    "gdb_excerpt": "Breakpoint 1 at 0x2e195: file crates/svc-core/src/lib.rs, line 81.\nBreakpoint 1, svc_core::explode (depth=2) at crates/svc-core/src/lib.rs:81\n81\t    explode(depth - 1) + 1\ndepth = 2"
+  },
+  "size_final": {
+    "executables": 2134540288,
+    "rlib": 1167667200,
+    "rmeta": 455364608,
+    "proc_macro_so": 136171520,
+    "dwo": 0,
+    "incremental": 1000058880,
+    "build_scripts": 68456448,
+    "build_script_output": 63983616,
+    "other": 17846272,
+    "dev_total": 5044088832,
+    "release": 0,
+    "total": 5044097024,
+    "executable_count": 31
+  },
+  "times": {
+    "build": 28.313348234980367,
+    "test_no_run": 25.38916403998155,
+    "check_all_targets": 15.797469333047047,
+    "edit_rebuild_tests_median": 13.98796235199552,
+    "edit_rebuild_tests_all": [
+      13.98796235199552,
+      13.80889860901516,
+      14.532716865069233
+    ],
+    "test_run": 15.30831087299157
+  }
+}

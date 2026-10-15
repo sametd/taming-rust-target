@@ -1,0 +1,114 @@
+{
+  "default": {
+    "separate": {
+      "a_s": 45.1,
+      "b_s": 42.8,
+      "gib": 15.22
+    },
+    "shared": {
+      "a_s": 44.7,
+      "b_s": 14.8,
+      "gib": 13.67
+    },
+    "sccache": {
+      "a_s": 52.2,
+      "b_s": 48.6,
+      "a_after_clean_s": 22.3,
+      "stats_a_cold": {
+        "hits": 0,
+        "misses": 716,
+        "not_cacheable": 101,
+        "compile_requests": 823,
+        "not_cached_reasons": {
+          "missing input": 7,
+          "crate-type": 58,
+          "-": 5,
+          "incremental": 31
+        }
+      },
+      "stats_b_warm": {
+        "hits": 412,
+        "misses": 304,
+        "not_cacheable": 101,
+        "compile_requests": 823,
+        "not_cached_reasons": {
+          "-": 5,
+          "incremental": 31,
+          "crate-type": 58,
+          "missing input": 7
+        }
+      },
+      "stats_a_after_clean": {
+        "hits": 716,
+        "misses": 0,
+        "not_cacheable": 101,
+        "compile_requests": 823,
+        "not_cached_reasons": {
+          "incremental": 31,
+          "-": 5,
+          "crate-type": 58,
+          "missing input": 7
+        }
+      },
+      "targets_gib": 15.22,
+      "cache_gib": 0.57
+    },
+    "no_cache_after_clean_s": 42.8
+  },
+  "recipe": {
+    "separate": {
+      "a_s": 36.5,
+      "b_s": 35.3,
+      "gib": 3.48
+    },
+    "shared": {
+      "a_s": 35.2,
+      "b_s": 8.9,
+      "gib": 2.58
+    },
+    "sccache": {
+      "a_s": 43.3,
+      "b_s": 39.1,
+      "a_after_clean_s": 15.5,
+      "stats_a_cold": {
+        "hits": 0,
+        "misses": 710,
+        "not_cacheable": 77,
+        "compile_requests": 793,
+        "not_cached_reasons": {
+          "incremental": 8,
+          "crate-type": 57,
+          "-": 5,
+          "missing input": 7
+        }
+      },
+      "stats_b_warm": {
+        "hits": 412,
+        "misses": 298,
+        "not_cacheable": 77,
+        "compile_requests": 793,
+        "not_cached_reasons": {
+          "missing input": 7,
+          "incremental": 8,
+          "-": 5,
+          "crate-type": 57
+        }
+      },
+      "stats_a_after_clean": {
+        "hits": 710,
+        "misses": 0,
+        "not_cacheable": 77,
+        "compile_requests": 793,
+        "not_cached_reasons": {
+          "incremental": 8,
+          "missing input": 7,
+          "crate-type": 57,
+          "-": 5
+        }
+      },
+      "targets_gib": 3.48,
+      "cache_gib": 0.43
+    },
+    "no_cache_after_clean_s": 36.2
+  }
+}

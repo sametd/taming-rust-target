@@ -1,0 +1,63 @@
+{
+  "scenario": "debug-line-tables",
+  "layout": "split",
+  "config": [
+    "profile.dev.debug=\"line-tables-only\""
+  ],
+  "env": [],
+  "zflags": [],
+  "rustc": "rustc 1.98.0 (88d9e12ae 2026-08-18)",
+  "size_after_session": {
+    "executables": 2159931392,
+    "rlib": 714866688,
+    "rmeta": 455364608,
+    "proc_macro_so": 231952384,
+    "dwo": 0,
+    "incremental": 437624832,
+    "build_scripts": 186183680,
+    "build_script_output": 63983616,
+    "other": 17850368,
+    "dev_total": 4267757568,
+    "release": 0,
+    "total": 4267765760,
+    "executable_count": 31
+  },
+  "tests": {
+    "ok": true,
+    "passed": 74
+  },
+  "debug": {
+    "backtrace_file_line": true,
+    "gdb_line_breakpoint": true,
+    "gdb_locals": false,
+    "backtrace_excerpt": "thread 'main' (347339) panicked at crates/svc-core/src/lib.rs:79:9:\nboom from svc-core\n   2: svc_core::explode\n             at ./demo/crates/svc-core/src/lib.rs:79:9\n   3: svc_core::explode\n             at ./demo/crates/svc-core/src/lib.rs:81:5\n   4: svc_core::explode\n             at ./demo/crates/svc-core/src/lib.rs:81:5",
+    "gdb_excerpt": "Breakpoint 1 at 0x2da51: file crates/svc-core/src/lib.rs, line 81.\nBreakpoint 1, svc_core::explode () at crates/svc-core/src/lib.rs:81\n81\t    explode(depth - 1) + 1"
+  },
+  "size_final": {
+    "executables": 2159931392,
+    "rlib": 714866688,
+    "rmeta": 455364608,
+    "proc_macro_so": 231952384,
+    "dwo": 0,
+    "incremental": 663887872,
+    "build_scripts": 186183680,
+    "build_script_output": 63983616,
+    "other": 17850368,
+    "dev_total": 4494020608,
+    "release": 0,
+    "total": 4494028800,
+    "executable_count": 31
+  },
+  "times": {
+    "build": 23.066035665920936,
+    "test_no_run": 12.464160903007723,
+    "check_all_targets": 16.034090664004907,
+    "edit_rebuild_tests_median": 3.4500950860092416,
+    "edit_rebuild_tests_all": [
+      3.344949346035719,
+      3.4500950860092416,
+      3.566271914052777
+    ],
+    "test_run": 4.254350070958026
+  }
+}

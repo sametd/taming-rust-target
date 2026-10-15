@@ -1,0 +1,33 @@
+generated split layout in ./demo/crates/svc/tests
+deps-no-debug+unpacked         dev  3.14 GiB | exec  1.17 (31) | rlib 0.61 | rmeta 0.40 | incr 0.66 | build  23.1s | tests  14.3s | edit 2.9s | tests ok=True (74) | bt=True gdb_line=True locals=True
+after weeks on 1.98:        3.20 GiB
+after rustup update (1.99): 6.27 GiB
+after opt-level experiment: 8.88 GiB
+after building on hyper 1.10: 11.07 GiB
+back on hyper 1.12 (current): 11.07 GiB
+
+--- cleaners (dry runs first) ---
+cargo sweep --installed:      [INFO] Would clean: nothing from "~/.cache/rts/aging"
+cargo sweep --toolchains 1.99.0-x86_64-unknown-linux-gnu: [INFO] Would clean: 2.64 GiB from "~/.cache/rts/aging"
+cargo sweep --time 1:         [INFO] Would clean: nothing from "~/.cache/rts/aging"
+target-gc --dry-run:          target-gc: would free 8.0 GiB of 11.1 GiB in 1s
+
+--- target-gc for real ---
+  mark: cargo build --workspace --all-targets
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.10s
+  mark: cargo test --workspace --no-run
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.10s
+  mark: cargo check --workspace --all-targets
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.10s
+target-gc: ~/.cache/rts/aging  (11.1 GiB)
+  debug/: 673 live units, removed 4704 entries, 8.0 GiB
+target-gc: freed 8.0 GiB of 11.1 GiB in 1s
+size after target-gc: 3.08 GiB  (was 11.07 GiB)
+
+--- is the next build a no-op? (count of 'Compiling' lines) ---
+cargo build --workspace --all-targets: 0 crates recompiled
+cargo test --workspace --no-run: 0 crates recompiled
+cargo check --workspace --all-targets: 0 crates recompiled
+cargo test: 74 tests passed
+AGING-DONE
+QUEUE-DONE

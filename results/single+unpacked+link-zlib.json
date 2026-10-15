@@ -1,0 +1,64 @@
+{
+  "scenario": "single+unpacked+link-zlib",
+  "layout": "single",
+  "config": [
+    "profile.dev.split-debuginfo=\"unpacked\"",
+    "target.x86_64-unknown-linux-gnu.rustflags=[\"-C\",\"link-arg=-Wl,--compress-debug-sections=zlib\"]"
+  ],
+  "env": [],
+  "zflags": [],
+  "rustc": "rustc 1.98.0 (88d9e12ae 2026-08-18)",
+  "size_after_session": {
+    "executables": 206626816,
+    "rlib": 995872768,
+    "rmeta": 455364608,
+    "proc_macro_so": 149962752,
+    "dwo": 326860800,
+    "incremental": 244269056,
+    "build_scripts": 88412160,
+    "build_script_output": 63983616,
+    "other": 16908288,
+    "dev_total": 2548260864,
+    "release": 0,
+    "total": 2548269056,
+    "executable_count": 8
+  },
+  "tests": {
+    "ok": true,
+    "passed": 74
+  },
+  "debug": {
+    "backtrace_file_line": true,
+    "gdb_line_breakpoint": true,
+    "gdb_locals": true,
+    "backtrace_excerpt": "thread 'main' (495527) panicked at crates/svc-core/src/lib.rs:79:9:\nboom from svc-core\n   2: svc_core::explode\n             at ./demo/crates/svc-core/src/lib.rs:79:9\n   3: svc_core::explode\n             at ./demo/crates/svc-core/src/lib.rs:81:5\n   4: svc_core::explode\n             at ./demo/crates/svc-core/src/lib.rs:81:5",
+    "gdb_excerpt": "Breakpoint 1 at 0x2e1f5: file crates/svc-core/src/lib.rs, line 81.\nBreakpoint 1, svc_core::explode (depth=2) at crates/svc-core/src/lib.rs:81\n81\t    explode(depth - 1) + 1\ndepth = 2"
+  },
+  "size_final": {
+    "executables": 206626816,
+    "rlib": 995872768,
+    "rmeta": 455364608,
+    "proc_macro_so": 149962752,
+    "dwo": 327589888,
+    "incremental": 326475776,
+    "build_scripts": 88412160,
+    "build_script_output": 63983616,
+    "other": 16908288,
+    "dev_total": 2631196672,
+    "release": 0,
+    "total": 2631204864,
+    "executable_count": 8
+  },
+  "times": {
+    "build": 27.053076506010257,
+    "test_no_run": 12.254882863955572,
+    "check_all_targets": 16.061180543038063,
+    "edit_rebuild_tests_median": 1.1575440829619765,
+    "edit_rebuild_tests_all": [
+      1.1790798290167004,
+      1.1575440829619765,
+      1.1139508839696646
+    ],
+    "test_run": 1.4625753200380132
+  }
+}
