@@ -1,9 +1,9 @@
 # rust-target-size
 
-Why Rust `target/` directories grow to tens of gigabytes, what actually helps, and a
+Code for the post "Taming Rust's target/ Directory". Why Rust `target/` directories grow to tens of gigabytes, what actually helps, and a
 tool that removes stale build artifacts without touching the ones you use.
 
-Write-up with all results: https://sametdemir.com/programming/rust-target-directory-size/
+Write-up with all results: https://sametdemir.com/programming/taming-rust-target-directory/
 
 ## target-gc
 
