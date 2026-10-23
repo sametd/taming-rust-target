@@ -1,0 +1,32 @@
+[
+ [
+  "weeks on Rust 1.98",
+  60,
+  7.37
+ ],
+ [
+  "rustup update to 1.99",
+  30,
+  14.62
+ ],
+ [
+  "opt-level = 1 experiment",
+  21,
+  22.53
+ ],
+ [
+  "hyper 1.10",
+  14,
+  28.26
+ ],
+ [
+  "a release build",
+  7,
+  28.98
+ ],
+ [
+  "today: hyper 1.12, 5 edit cycles, current session",
+  0,
+  29.17
+ ]
+]

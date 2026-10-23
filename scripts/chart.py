@@ -14,14 +14,13 @@ ORDER = [
     ("debug-line-tables", 'debug = "line-tables-only"'),
     ("deps-no-debug", "deps: debug = false"),
     ("single-test-binary", "one test binary"),
-    ("deps-no-debug+unpacked", "recipe 1: everywhere"),
-    ("single+unpacked+link-zlib", "recipe 4: debugger-heavy"),
-    ("single+deps-no-debug+unpacked", "recipe 2: per project"),
-    ("single+line-tables+deps-none", "recipe 3: disk-critical"),
-    ("nightly-disk-critical", "recipe 3 on nightly"),
+    ("deps-no-debug+unpacked", "global config only"),
+    ("single+unpacked+link-zlib", "full debug info everywhere"),
+    ("single+deps-no-debug+unpacked", "global config + one test binary"),
+    ("nightly-recipe2+embed", "same, nightly embed-metadata"),
+    ("single+line-tables+deps-none", "line tables, deps none, one binary"),
 ]
-HIGHLIGHT = {"deps-no-debug+unpacked", "single+unpacked+link-zlib", "single+deps-no-debug+unpacked",
-             "single+line-tables+deps-none", "nightly-disk-critical"}
+HIGHLIGHT = {"single+deps-no-debug+unpacked", "nightly-recipe2+embed"}
 BROKEN = {"link-zstd"}
 
 W, label_w, bar_w, row_h, top = 760, 250, 380, 28, 34

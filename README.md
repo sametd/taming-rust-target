@@ -54,6 +54,7 @@ rebuilding tests after an edit 7.0 s → 1.0 s. Details and other options in the
 ```sh
 cd scripts
 ./run_all.sh                     # full matrix, ~1 h on 20 cores, ~12 GB disk
+python3 compare_cleaners.py       # cleaners on an aged target/ (needs cargo-sweep, cargo-target-gc, reflink fs)
 python3 measure.py my-try --layout single --config 'profile.dev.package."*".debug=false'
 ```
 

@@ -2,7 +2,7 @@ target/
 __pycache__/
 *.pyc
 # blog-only files
-post.md
+post*.md
 publish-draft.sh
 mkdraft.php
 post.frozen-*.md

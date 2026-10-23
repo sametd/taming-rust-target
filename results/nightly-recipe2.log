@@ -1,0 +1,2 @@
+generated single layout in ./demo/crates/svc/tests
+nightly-recipe2+embed          dev  1.38 GiB | exec  0.18 (8) | rlib 0.35 | rmeta 0.41 | incr 0.30 | build  22.0s | tests  11.6s | edit 1.0s | tests ok=True (74) | bt=True gdb_line=True locals=True
