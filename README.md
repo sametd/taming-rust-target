@@ -34,6 +34,9 @@ directories. The next build is a no-op.
 
 Profile directories that none of the commands touch (often `release/`) are left alone.
 
+Marking runs the commands for real, so if something they need is not built yet, it gets
+built first, even with `--dry-run`. Nothing is deleted until marking succeeds.
+
 **Shared target directory:** pass every project that uses it, otherwise their
 artifacts look dead:
 
@@ -41,7 +44,7 @@ artifacts look dead:
 ./target-gc --manifest-path ~/a/Cargo.toml --manifest-path ~/b/Cargo.toml
 ```
 
-Single file, Python 3.8+, no dependencies. Linux and macOS.
+Single file, Python 3.8+, no dependencies. Tested on Linux.
 
 ## What helps (measured)
 
@@ -61,6 +64,11 @@ Details, trade-offs and the things that don't work (zstd debug compression break
 Rust backtraces) are in the write-up.
 
 ## Reproducing
+
+Needs: Rust stable plus the `nightly` and `1.99.0` toolchains (`rustup toolchain install`),
+gdb for the debuggability checks, and for the extra experiments
+[sccache](https://github.com/mozilla/sccache) (`many_projects.py`) and
+[cargo-sweep](https://github.com/holmgr/cargo-sweep) (`aging.sh`).
 
 ```
 demo/                     the benchmark workspace

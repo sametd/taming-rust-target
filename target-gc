@@ -28,6 +28,9 @@ Default commands:
 Add e.g. "build --release" to keep release artifacts too. Profile directories
 that no command touches (e.g. release/ above) are left alone entirely.
 
+Marking runs the commands for real: anything they need that is not built yet
+gets built first, also with --dry-run. Nothing is deleted unless marking succeeds.
+
 Zero dependencies (Python 3.8+). MIT OR Apache-2.0.
 """
 import argparse, json, os, re, shlex, shutil, subprocess, sys, time
@@ -189,7 +192,11 @@ def sweep(profile_dir: Path, live: set, ws_units: Counter, dry: bool):
 
 
 def main():
-    ap = argparse.ArgumentParser(description=__doc__.split("\n\n")[0])
+    ap = argparse.ArgumentParser(
+        description=__doc__.split("\n\n")[0],
+        epilog=__doc__[__doc__.index("Usage:"):__doc__.index("Zero dependencies")].strip(),
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+    )
     ap.add_argument("--dry-run", "-n", action="store_true")
     ap.add_argument("--manifest-path", action="append", default=[],
                     help="project to mark; repeat for every project sharing the target dir")
