@@ -1,4 +1,4 @@
-# rust-target-size
+# taming-rust-target
 
 `target-gc` deletes stale cargo build artifacts and keeps the ones you still use.
 Plus the benchmark behind [Taming Rust's target/ Directory](https://sametdemir.com/programming/taming-rust-target-directory/).
@@ -6,7 +6,7 @@ Plus the benchmark behind [Taming Rust's target/ Directory](https://sametdemir.c
 ## target-gc
 
 ```sh
-curl -LO https://raw.githubusercontent.com/sametd/rust-target-size/main/target-gc
+curl -LO https://raw.githubusercontent.com/sametd/taming-rust-target/main/target-gc
 chmod +x target-gc
 
 ./target-gc --dry-run    # in a cargo project: show what would be removed
