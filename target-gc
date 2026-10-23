@@ -1,37 +1,24 @@
 #!/usr/bin/env python3
 """target-gc: delete stale cargo build artifacts, keep everything you still use.
 
-Mark & sweep:
-  mark   run the cargo commands you normally run, with --message-format=json.
-         Cargo reports every artifact the build uses, including up-to-date
-         ("fresh") ones. Their hashes are the live set.
-  sweep  in each profile directory those commands used, delete deps/,
-         examples/, build/ and .fingerprint/ entries whose hash is not live,
-         and incremental/ dirs beyond what the live units need.
-
-Unlike `cargo clean`, nothing you use is deleted, so the next build is a no-op.
-Unlike age-based cleaning, it also catches stale artifacts that are recent
-(toolchain bumps, feature/flag changes, rust-analyzer builds).
+Runs your cargo commands with --message-format=json. Every artifact cargo
+reports is kept; everything else in the profile directories they use is
+deleted. The next build compiles nothing.
 
 Usage:
   target-gc [--dry-run] [--manifest-path P ...] [--target-dir D] [-- CMD ...]
 
-Shared target directory (CARGO_TARGET_DIR / build.target-dir used by several
-projects): pass every project that uses it, or their artifacts look dead:
+Examples:
+  target-gc --dry-run
+  target-gc -- "build --workspace" "test --no-run --features foo" "build --release"
   target-gc --manifest-path ~/a/Cargo.toml --manifest-path ~/b/Cargo.toml
 
-Each CMD is a cargo subcommand line, e.g.  -- "build --workspace" "test --no-run"
-Default commands:
-  build --workspace --all-targets
-  test  --workspace --no-run
-  check --workspace --all-targets
-Add e.g. "build --release" to keep release artifacts too. Profile directories
-that no command touches (e.g. release/ above) are left alone entirely.
+Default commands: build --workspace --all-targets, test --workspace --no-run,
+check --workspace --all-targets. Profile directories no command uses are not
+touched. Missing artifacts are built first, also with --dry-run. For a shared
+target directory, pass every project that uses it.
 
-Marking runs the commands for real: anything they need that is not built yet
-gets built first, also with --dry-run. Nothing is deleted unless marking succeeds.
-
-Zero dependencies (Python 3.8+). MIT OR Apache-2.0.
+Zero dependencies (Python 3.8+). Apache-2.0.
 """
 import argparse, json, os, re, shlex, shutil, subprocess, sys, time
 from collections import Counter, defaultdict
@@ -197,11 +184,11 @@ def main():
         epilog=__doc__[__doc__.index("Usage:"):__doc__.index("Zero dependencies")].strip(),
         formatter_class=argparse.RawDescriptionHelpFormatter,
     )
-    ap.add_argument("--dry-run", "-n", action="store_true")
+    ap.add_argument("--dry-run", "-n", action="store_true", help="show what would be removed")
     ap.add_argument("--manifest-path", action="append", default=[],
-                    help="project to mark; repeat for every project sharing the target dir")
-    ap.add_argument("--target-dir")
-    ap.add_argument("commands", nargs="*", help="cargo commands to keep artifacts for")
+                    help="project to mark (repeatable)")
+    ap.add_argument("--target-dir", help="default: what cargo uses")
+    ap.add_argument("commands", nargs="*", help="cargo commands whose artifacts to keep")
     args = ap.parse_args()
     args.commands = args.commands or DEFAULT_CMDS
 
