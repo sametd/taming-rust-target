@@ -5,3 +5,4 @@ __pycache__/
 post.md
 publish-draft.sh
 mkdraft.php
+post.frozen-*.md
